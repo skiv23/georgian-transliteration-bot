@@ -19,6 +19,7 @@ async def send_welcome(message):
         "Type /transliterate to start or /help to see the list of available characters"
     )
 
+
 @bot.message_handler(commands=['help'])
 async def send_welcome(message):
     await bot.reply_to(
@@ -39,6 +40,8 @@ async def transliterate(message):
 async def accept_message(message):
     chat_id = message.chat.id
     if chat_id in chats:
+        if message.text in ['stop', '/stop']:
+            del chats[chat_id]
         result = await chats[chat_id].add_message(message)
         if result:
             del chats[chat_id]
