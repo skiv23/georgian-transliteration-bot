@@ -15,7 +15,7 @@ chats = {}
 async def send_welcome(message):
     await bot.reply_to(
         message,
-        "Hello. This bot allows you to transliterate russian text into Georgian letters."
+        "Hello. This bot allows you to transliterate russian text into Georgian letters. "
         "Type /transliterate to start or /help to see the list of available characters"
     )
 
