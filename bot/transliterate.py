@@ -36,18 +36,29 @@ class Transliterate:
             return await self.transliterate()
         return False
 
+    async def get_characters_list(self):
+        if self.characters == 'all':
+            return self.mapping.keys()
+        return list(self.characters)
+
     async def transliterate(self):
         try:
+            characters_list = await self.get_characters_list()
             replaced_chars = []
-            for char in list(self.characters):
+            non_replaced_messages = []
+            for char in characters_list:
                 if self.mapping[char] in replaced_chars:
-                    await self.bot.send_message(
-                        self.chat_id,
-                        f"{self.mapping[char]} was already replaced, transliteration was not applied for {char}",
+                    non_replaced_messages.append(
+                        f"{self.mapping[char]} was already replaced, transliteration was not applied for {char}"
                     )
                 else:
                     self.initial_message = self.initial_message.replace(self.mapping[char], char)
                     replaced_chars.append(self.mapping[char])
+            if non_replaced_messages:
+                await self.bot.send_message(
+                    self.chat_id,
+                    '\n'.join(non_replaced_messages),
+                )
             await self.bot.send_message(
                 self.chat_id,
                 self.initial_message,
